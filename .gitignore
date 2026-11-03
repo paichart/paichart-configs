@@ -1,0 +1,19 @@
+# Terraform state, plans and variables files are never committed.
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+crash.log
+*.tfvars
+*.tfvars.*
+*.tfplan
+*.tfvars.json
+# Credentials of any kind
+.env
+*.env
+kubeconfig*
+*.kubeconfig
+hosts.yaml
+*.pem
+*.key

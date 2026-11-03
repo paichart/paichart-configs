@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-api-flags
+  namespace: trading
+  labels: { app: orders-api }
+data:
+  FEATURE_X: "off"
+  LOG_LEVEL: "info"
