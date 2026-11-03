@@ -1,0 +1,4 @@
+# Synthetic lab addresses that look public but are not anyone's infrastructure (one per line).
+1.1.1.1   # router ID / loopback in the IGP topologies
+2.2.2.2   # router ID / loopback in the IGP topologies
+3.3.3.3   # router ID / loopback in the IGP topologies
