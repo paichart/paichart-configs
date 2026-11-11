@@ -12,6 +12,9 @@ on two plan defects: the core rule sat on an interface the traffic never crosses
 to the NAT pool. This revision binds the core rule where traffic from ceos1 arrives (`Ethernet1`), has ceos1 advertise the
 pool, states what must be reachable, and keeps the BGP session safe (the core rule denies other traffic to the app only).
 
+**Released:** the `git-only/` variant, 2026-11-11 — both legs and the integration review approved (pool `10.99.0.6/31`,
+its static route and BGP advertisement on ceos1, the core rule on ceos2 `Ethernet1`). The `git-live/` variant has not been run yet.
+
 ## Pick a variant
 
 | | [`git-only/`](git-only/) | [`git-live/`](git-live/) |
