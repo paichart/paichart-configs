@@ -2,3 +2,4 @@
 1.1.1.1   # router ID / loopback in the IGP topologies
 2.2.2.2   # router ID / loopback in the IGP topologies
 3.3.3.3   # router ID / loopback in the IGP topologies
+4.32.2.1  # not an address: the EOS software version 4.32.2.1F in the IGP use case (the check reads the digits as an IPv4)
