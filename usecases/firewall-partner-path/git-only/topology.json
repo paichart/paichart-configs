@@ -1,0 +1,40 @@
+{
+  "name": "firewall-partner-path-git-only",
+  "description": "A two-leg network program: an edge leg on ceos1 permits partner HTTPS and source-NATs it to a pool it selects; a core leg on ceos2 admits that pool.",
+  "path": "partner -> ceos1 (edge) -> ceos2 (core) -> internal app",
+  "fabric": {
+    "devices": [
+      "ceos1",
+      "ceos2"
+    ],
+    "natPoolRange": "10.99.0.0/24",
+    "fabricLink": "10.0.12.0/30"
+  },
+  "policyInterfaces": {
+    "ceos1": {
+      "Ethernet3": "PARTNER-UPLINK"
+    },
+    "ceos2": {
+      "Ethernet2": "DMZ-SEGMENT"
+    }
+  },
+  "flow": {
+    "source": "203.0.113.0/24",
+    "destination": "10.20.0.10/32",
+    "protocol": "tcp",
+    "port": 443
+  },
+  "configRepo": {
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "paths": [
+      "network/base/ceos1-startup.cfg",
+      "network/base/ceos2-startup.cfg"
+    ]
+  },
+  "interdependency": {
+    "from": "Pipeline 1",
+    "to": "Pipeline 2",
+    "value": "the NAT pool (a /31 or /30 inside 10.99.0.0/24)"
+  }
+}

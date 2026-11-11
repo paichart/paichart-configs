@@ -10,6 +10,18 @@ change are the files of record in this repository.
 | [`held-terraform-window-p1`](held-terraform-window-p1/) | Terraform | adds `prevent_destroy` to the application log bucket, as edits to `terraform/main.tf` | 2026-10-21 |
 | [`held-network-window-p1`](held-network-window-p1/) | network (value + change) | gives each switch a new telemetry-exporter loopback on a free address, derived from the current configuration | 2026-10-27 |
 
+**Prepared demos — network only, not yet run from this repository** (each has a README: what you need, the
+placeholders to fill in, what success looks like):
+
+| Use case | Variants | What it does |
+|---|---|---|
+| [`loopback-ceos2`](loopback-ceos2/) | git-only, git-live | a value leg derives one free exporter address; a change leg adds a loopback on ceos2 with it |
+| [`firewall-partner-path`](firewall-partner-path/) | git-only, git-live | partner HTTPS source-NATed at the edge switch to a pool it selects; the core switch admits that pool |
+| [`ssh-access-triangle`](ssh-access-triangle/) | git-only | an SSH allowlist for the management network on three switches |
+
+`git-only/` reads only the files in this repository; `git-live/` also reads the running switches. The two
+`requirements.md` files of a pair differ only in their Device sources blocks and "Connection surfaces" (CI checks it).
+
 **Awaiting a released run:** a Kubernetes-only PodDisruptionBudget case (its only run was refused by the integration reviewer on
 an unconfirmed teardown — a platform-fact gap, not the change). Kubernetes is covered above by `telemetry-export-held`.
 

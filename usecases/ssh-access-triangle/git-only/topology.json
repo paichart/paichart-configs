@@ -1,0 +1,21 @@
+{
+  "name": "ssh-access-triangle-git-only",
+  "description": "A one-leg network program: an SSH allowlist admitting only the management network on three OSPF switches.",
+  "fabric": {
+    "devices": [
+      "ceos1",
+      "ceos2",
+      "ceos3"
+    ],
+    "managementNetwork": "172.30.31.0/24"
+  },
+  "configRepo": {
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "paths": [
+      "network/igp-triangle/ceos1-startup.cfg",
+      "network/igp-triangle/ceos2-startup.cfg",
+      "network/igp-triangle/ceos3-startup.cfg"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "loopback-ceos2-git-live",
+  "description": "A two-leg network program: a value leg derives one free telemetry-exporter address from the exporter pool; a change leg configures one new loopback on ceos2 with that address.",
+  "fabric": {
+    "devices": [
+      "ceos1",
+      "ceos2"
+    ],
+    "exporterPool": "10.99.0.0/24"
+  },
+  "configRepo": {
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "paths": [
+      "network/base/ceos1-startup.cfg",
+      "network/base/ceos2-startup.cfg"
+    ]
+  },
+  "interdependency": {
+    "from": "Pipeline 1",
+    "to": "Pipeline 2",
+    "value": "one exporter address (/32) from 10.99.0.0/24"
+  },
+  "readOnlyServices": {
+    "deviceDescriptorUrl": "https://raw.githubusercontent.com/paichart/paichart/main/descriptors/ceos-lab-readonly-descriptor.json"
+  }
+}

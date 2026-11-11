@@ -31,3 +31,6 @@ jobs:
 
       - name: Structure, forbidden files and addresses
         run: python3 .github/scripts/check-tree.py
+
+      - name: Variant twins (git-only vs git-live)
+        run: python3 .github/scripts/check-twins.py
