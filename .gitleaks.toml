@@ -1,0 +1,17 @@
+# gitleaks configuration for paichart-configs.
+# The default rules stay on. The only exceptions are the deliberate FAKE secrets listed in README.md
+# ("Deliberate fake secrets"), each allow-listed by its EXACT value, never by a pattern (2026-11-11).
+# A new fake needs a README line AND an entry here; anything else gitleaks reports is a real finding.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Deliberate fake secrets (redaction test data, non-working) — see README.md"
+regexes = [
+  '''AKIA1234567890ABCD99''',
+  '''s3cr3t-rig-token-do-not-leak''',
+  '''rig-pw-do-not-leak''',
+  '''postgres://metrics:hunter2@metrics-db\.trading\.svc:5432/orders''',
+  '''s3cr3tLabComm[0-9]+''',
+]

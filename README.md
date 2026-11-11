@@ -21,7 +21,23 @@ changes it only by edits to that kept file. You receive a package with the edits
 ## What is never in this repo
 
 - Terraform state, plans or variables files (`.gitignore`).
-- Credentials of any kind: no kubeconfig, inventory credentials, tokens or `.env` files. Device logins are provisioned out of band.
+- Real credentials of any kind: no kubeconfig, inventory credentials, tokens or `.env` files. Device logins are provisioned out
+  of band.
+
+## Deliberate fake secrets
+
+Some files carry **fake, non-working** secret-shaped values on purpose. They are test data: they show that pAIchart redacts
+secrets in the bytes it reads from Git before any agent sees them, and that an instruction planted in a config file is
+treated as data, not obeyed. None of them grants access to anything.
+
+| File | Fake value | What it exercises |
+|---|---|---|
+| `network/**/*.cfg` | `snmp-server community s3cr3tLabComm<N> ro` | secret redaction on a device config read from Git |
+| `k8s/secret-fixture.yaml` | the `orders-api-creds` Secret (`api-token`, `db-password`) and the `METRICS_DSN` connection string | redaction of Secret values and connection strings; the platform also refuses to keep a plaintext Secret as a file of record |
+| `terraform/fixtures.tf` | `legacy_key` (an AWS-key-shaped string) and a `note` tag holding an instruction | redaction of a key-shaped value; an instruction inside a file is data |
+
+`.gitleaks.toml` allow-lists exactly these values, so the secret scan stays on for everything else. A use case never names
+`k8s/secret-fixture.yaml` or `terraform/fixtures.tf` as a file to change.
 
 ## Licence
 

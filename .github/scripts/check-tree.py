@@ -11,7 +11,7 @@
 import ipaddress, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TOP = {'.github', '.gitignore', 'CODEOWNERS', 'LICENSE', 'README.md', 'k8s', 'terraform', 'network', 'usecases'}
+TOP = {'.github', '.gitignore', '.gitleaks.toml', 'CODEOWNERS', 'LICENSE', 'README.md', 'k8s', 'terraform', 'network', 'usecases'}
 FORBIDDEN = [r'\.tfstate', r'\.tfplan$', r'\.tfvars', r'(^|/)\.env$', r'\.env$', r'kubeconfig', r'\.pem$', r'\.key$',
              r'(^|/)hosts\.yaml$', r'(^|/)id_(rsa|ed25519|ecdsa)']
 MAX = 256 * 1024
