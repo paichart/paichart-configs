@@ -6,8 +6,9 @@ A value leg works out one free telemetry-exporter address from the pool `10.99.0
 change leg then adds one loopback on `ceos2` with that address and advertises it in BGP. The change leg edits `ceos2`'s
 configuration file by reference; nothing is applied to a switch.
 
-**Released:** the `git-only/` variant, 2026-11-11 — every leg and the integration review approved, with the address and
-loopback described below. The `git-live/` variant has not been run yet.
+**Released:** both variants, 2026-11-11 — every leg and the integration review approved, with the address and loopback
+described below. In the `git-live/` run the address was read from the files and the running switches, and the change
+package noted where ceos2's file differs from the running switch and applied only the added lines.
 
 ## Pick a variant
 
