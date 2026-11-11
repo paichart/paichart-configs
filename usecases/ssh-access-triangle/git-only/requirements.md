@@ -29,8 +29,9 @@ Pipeline 1 changes ceos1, ceos2 and ceos3, and applies these rules on each:
 
 - The switch tells admitted sessions apart by their source address. Sessions reach the switch directly, with no address
   translation in between.
-- What is protected is the SSH service of the switch, in every VRF the switch's configuration file runs SSH in. Pipeline 1
-  states each VRF it covered.
+- What is protected is the SSH service of the switch. SSH runs in the default VRF whether or not the configuration file has a
+  `management ssh` section. Pipeline 1 covers the default VRF and every other VRF the file configures SSH in, and states each
+  VRF it covered.
 - The admitted network may use SSH (tcp/22) only. The rule grants nothing else.
 - Pipeline 1 creates an access list named `MGMT-SSH`: permit SSH from `172.30.31.0/24`, deny everything else with
   logging, and applies it to the SSH service. Any access list already applied to SSH is replaced by `MGMT-SSH`; Pipeline 1
@@ -54,8 +55,9 @@ Check numbering is FIXED and referenced by number elsewhere. A new requirement A
 
 1. Each of ceos1, ceos2 and ceos3 gets an access list `MGMT-SSH` that permits tcp/22 from `172.30.31.0/24` only and denies
    everything else with logging.
-2. On each switch that access list is applied to the SSH service in every VRF Pipeline 1 states SSH runs in.
-3. Pipeline 1 changes nothing on any switch beyond that access list and its application to SSH.
+2. On each switch that access list is applied to the SSH service in the default VRF and in every other VRF the switch's
+   configuration file configures SSH in.
+3. Pipeline 1 makes no change on any switch beyond that access list and its application to SSH.
 
 ## Validation shape
 
