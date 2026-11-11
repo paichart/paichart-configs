@@ -18,8 +18,9 @@ placeholders to fill in, what success looks like):
 | [`loopback-ceos2`](loopback-ceos2/) | git-only, git-live | a value leg derives one free exporter address; a change leg adds a loopback on ceos2 with it |
 | [`firewall-partner-path`](firewall-partner-path/) | git-only, git-live | partner HTTPS source-NATed at the edge switch to a pool it selects; the core switch admits that pool |
 | [`ssh-access-triangle`](ssh-access-triangle/) | git-only | an SSH allowlist for the management network on three switches |
+| [`igp-migration-2node`](igp-migration-2node/) | live | OSPF to IS-IS in four gated phases; you apply each phase before the next |
 
-`git-only/` reads only the files in this repository; `git-live/` also reads the running switches. The two
+`git-only/` reads only the files in this repository; `git-live/` also reads the running switches; `live/` reads only the running switches. The two
 `requirements.md` files of a pair differ only in their Device sources blocks and "Connection surfaces" (CI checks it).
 
 **Awaiting a released run:** a Kubernetes-only PodDisruptionBudget case (its only run was refused by the integration reviewer on
