@@ -46,7 +46,7 @@ running switches. The two `requirements.md` files of a pair differ only in their
 
 | Use case | Variants | What it does |
 |---|---|---|
-| [`igp-migration-2node`](igp-migration-2node/) | `live/` | OSPF to IS-IS in four gated phases; a person applies each phase before the next |
+| [`igp-migration-2node-r18`](igp-migration-2node-r18/) | `live/` | OSPF to IS-IS in four gated phases; a person applies each phase before the next. R18's specification (released 2026-08-28), updated only for the current platform |
 
 ## Pending — Kubernetes, Terraform, observability
 
