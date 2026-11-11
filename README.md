@@ -5,18 +5,45 @@ against them. A pipeline reads a file here through pAIchart's GitHub file source
 changes it only by edits to that kept file. You receive a package with the edits, a rollback and the checks to run;
 **nothing is applied to your systems — applying is your step.**
 
-| Folder | Domain | What it holds |
+**Network is the current focus.** Every released use case here is a network program. Kubernetes, Terraform and observability
+are pending: their folders are present, but none of their use cases has run from this repository yet.
+
+| Folder | Domain | Status |
 |---|---|---|
-| `k8s/` | kubernetes-gitops | workload manifests |
-| `terraform/` | terraform-iac | the workspace `.tf` files |
-| `network/` | network-provisioning | one rendered startup configuration per device, per topology (`base`, `igp-2node`, `igp-triangle`) |
+| `network/` | network-provisioning — one startup configuration per device, per topology (`base`, `igp-2node`, `igp-triangle`) | **in use** |
+| `k8s/`, `terraform/` | Kubernetes, Terraform | pending |
+| `usecases/` | program inputs (`requirements.md` + `topology.json`) and what each run proved | see [`usecases/README.md`](usecases/README.md) |
 
-## Using it
+## Self-host quick start
 
-- **On a self-hosted pAIchart:** set `GIT_FILE_SOURCE_PIN=paichart/paichart-configs` in the hub's `.env` (or your own repo — this
-  one is an example), then follow the self-host run sheet step 9c. The rules for the pin and its limits are in pAIchart's
-  `docs/SELF-HOST-KEPT-FILES.md`.
-- **Pipelines read `main`.** It is protected: changes land by pull request only.
+You need a self-hosted pAIchart with an Anthropic API key (pAIchart's `docs/SELF-HOST-RUN-SHEET.md` up to step 9b). Then:
+
+1. **A GitHub token.** GitHub → Settings → Developer settings → Fine-grained tokens → *Public repositories (read-only)*, no
+   permissions. Paste it into `services/github-service/.env` in your pAIchart clone.
+2. **The pin.** In the hub's `.env`, set `GIT_FILE_SOURCE_PIN=paichart/paichart-configs` (or your own repo — see below) and restart
+   the hub. Agents can read only that repository, and only its `main` branch.
+3. **Start and register the GitHub file source.**
+   `docker compose -f docker-compose.self-host.yml --profile git up -d --build`, then `npm run seed:github-service` — it prints the
+   repository agents may read. Full detail and checks: pAIchart run sheet **step 9c**.
+4. **Run a use case** that needs nothing but Git — start with `usecases/loopback-ceos2/git-only/`. Create a project, a phase and a
+   stage, then a `PIPELINE` task titled `… (protocol: pov-program)` whose description names the variant's two raw URLs (example in
+   [`usecases/README.md`](usecases/README.md#running-one)); attach the *Pipeline Harness* template and run it. Replace the
+   placeholder approvers (`…@example.com`) with people on your project's team first, or every gate falls to you as project owner.
+
+### What each use case needs
+
+| Variant | What must be running besides pAIchart and the GitHub file source |
+|---|---|
+| `git-only/` | nothing — the files in this repository are the whole input |
+| `git-live/` | the switches themselves, behind a **read-only** device service you register with a descriptor (point the Device sources lines and `readOnlyServices` at your descriptor's URL) |
+| `live/` | the same, and you apply each phase's package to the switches between gates |
+
+## Use your own repository
+
+Copy the layout (`network/<topology>/<device>-startup.cfg`, one file per device), protect `main`, and pin
+`GIT_FILE_SOURCE_PIN=<your-org>/<your-repo>`. In a use case's `requirements.md`, change every Device sources line from
+`paichart/paichart-configs/…` to your repository and path. A spec that names a repository other than the pinned one is refused at
+its first read. To write a spec from scratch, copy the shape of a released use case.
 
 ## What is never in this repo
 

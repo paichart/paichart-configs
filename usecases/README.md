@@ -1,41 +1,68 @@
 # Use cases
 
-Each folder is a pAIchart **program** input — a `requirements` file and a `topology.json` — whose earlier revision produced a
-**released** run (`programReleasable: true`: every leg approved and the program's integration reviewer approved). The configs they
-change are the files of record in this repository.
+Each folder is a pAIchart **program** input: a `requirements.md` and a `topology.json` per variant, plus a README saying what must
+be running, which values are placeholders and what success looks like. **Released** means a run came back
+`programReleasable: true` — every leg approved and the program's integration reviewer approved.
 
-| Use case | Domains | What it does | Released |
-|---|---|---|---|
-| [`telemetry-export-held`](telemetry-export-held/) | network (value), Kubernetes, Terraform, observability | derives the smallest range covering the fabric's telemetry exporters, then authorises exactly that range in a NetworkPolicy, a bucket policy and a collector config | 2026-10-31 (pov-program 2.2.1) |
-| [`held-terraform-window-p1`](held-terraform-window-p1/) | Terraform | adds `prevent_destroy` to the application log bucket, as edits to `terraform/main.tf` | 2026-10-21 |
-| [`held-network-window-p1`](held-network-window-p1/) | network (value + change) | gives each switch a new telemetry-exporter loopback on a free address, derived from the current configuration | 2026-10-27 |
-| [`loopback-ceos2`](loopback-ceos2/) | network (value + change), Git only or Git + live | a value leg derives one free exporter address from the switches' files in this repository; a change leg adds a loopback on ceos2 with it, as edits to its file | 2026-11-11 (`git-only/` and `git-live/`) |
-| [`firewall-partner-path-r2`](firewall-partner-path-r2/) | network (two change legs), Git only or Git + live | partner HTTPS admitted at the edge switch and source-NATed to a pool it selects and advertises in BGP; the core switch admits only that pool to the app | 2026-11-11 (`git-only/`), 2026-11-12 (`git-live/`) |
-| [`ssh-access-triangle`](ssh-access-triangle/) | network (one change leg, three switches), Git only | an SSH allowlist admitting only the management network on three OSPF switches | 2026-11-12 (`git-only/`) |
+Variants: `git-only/` reads only the files in this repository; `git-live/` also reads the running switches; `live/` reads only the
+running switches. The two `requirements.md` files of a pair differ only in their Device sources blocks and "Connection surfaces"
+(CI checks it).
 
-**Prepared demos — network only, not yet run from this repository** (each has a README: what you need, the
-placeholders to fill in, what success looks like):
+## Released from this repository — network
+
+| Use case | Shape | Released |
+|---|---|---|
+| [`loopback-ceos2`](loopback-ceos2/) | a value leg works out one free exporter address; a change leg adds a loopback on ceos2 with it | `git-only/` 2026-11-11, `git-live/` 2026-11-11 |
+| [`firewall-partner-path-r2`](firewall-partner-path-r2/) | two change legs: the edge switch admits partner HTTPS and source-NATs it to a pool it selects and advertises; the core switch admits only that pool | `git-only/` 2026-11-11, `git-live/` 2026-11-12 |
+| [`ssh-access-triangle`](ssh-access-triangle/) | one change leg adds an SSH allowlist for the management network on three switches | `git-only/` 2026-11-12 |
+
+### What each run proved
+
+**`loopback-ceos2`**
+- The address the value leg works out from the running switches matches the one it works out from the files alone
+  (`10.99.0.3/32` both times), so the files here reflect what the switches hold.
+- The change leg read ceos2 from Git and from the device. Where the file differs from the running switch, the package said so and
+  applies only the added lines, never the whole file.
+- Each rule sat with the leg that applies it: the value leg chose the address, the change leg chose the loopback number, its
+  description and how it is advertised.
+
+**`firewall-partner-path-r2`**
+- A value can pass between two change legs: the edge leg chose the NAT pool (`10.99.0.6/31`), the core leg used exactly that pool.
+- The same design comes out whether the legs read Git only or Git and the running switches.
+- Applied on a lab pair of switches (core first, then edge, on a commit timer) and rolled back: every line was accepted, the core
+  switch learned the pool from the edge over BGP, the BGP session stayed up. Not shown yet: NAT translating real partner traffic
+  end to end (the lab has no partner or app hosts).
+- [`firewall-partner-path`](firewall-partner-path/) is its first revision. Its run was correctly refused by the integration
+  reviewer: the core rule sat on an interface the traffic never crosses, and nothing routed the replies back to the pool.
+
+**`ssh-access-triangle`**
+- The first run of an access change: every choice in the spec — who is admitted, which service, what happens to existing access
+  lists, what stays untouched — reached the change package.
+- One leg changed three switches the same way, from their files alone.
+- The stanza was accepted by the switch software in a configuration session (then discarded). Not shown yet: SSH refused on a
+  running switch (the three-switch lab is not running).
+
+## Prepared — network, not yet released
 
 | Use case | Variants | What it does |
 |---|---|---|
-| [`igp-migration-2node`](igp-migration-2node/) | live | OSPF to IS-IS in four gated phases; you apply each phase before the next |
+| [`igp-migration-2node`](igp-migration-2node/) | `live/` | OSPF to IS-IS in four gated phases; a person applies each phase before the next |
+| [`held-network-window-p1`](held-network-window-p1/) | — | a loopback on each switch on a free address; its runs read an earlier repository and it has not run from this one |
 
-`git-only/` reads only the files in this repository; `git-live/` also reads the running switches; `live/` reads only the running switches. The two
-`requirements.md` files of a pair differ only in their Device sources blocks and "Connection surfaces" (CI checks it).
+## Pending — Kubernetes, Terraform, observability
 
-**Awaiting a released run:** a Kubernetes-only PodDisruptionBudget case (its only run was refused by the integration reviewer on
-an unconfirmed teardown — a platform-fact gap, not the change). Kubernetes is covered above by `telemetry-export-held`.
+Not the current focus. [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/)
+are here from earlier work; neither has run from this repository.
 
 ## Running one
 
-Launch a program whose task description names the two design artifacts by their raw URLs, for example:
+Launch a `pov-program` task whose description names the variant's two raw URLs, for example:
 
 ```
 Design artifacts for the Program Architect (fetch ONLY these two URLs):
-- topology-as-code: https://raw.githubusercontent.com/paichart/paichart-configs/main/usecases/held-terraform-window-p1/topology.json
-- requirements: https://raw.githubusercontent.com/paichart/paichart-configs/main/usecases/held-terraform-window-p1/requirements.md
+- topology-as-code: https://raw.githubusercontent.com/paichart/paichart-configs/main/usecases/loopback-ceos2/git-only/topology.json
+- requirements: https://raw.githubusercontent.com/paichart/paichart-configs/main/usecases/loopback-ceos2/git-only/requirements.md
 ```
 
 The hub must be allowed to read this repository: `GIT_FILE_SOURCE_PIN=paichart/paichart-configs` (self-host run sheet step 9c).
-`telemetry-export-held` uses `requirements.program.md` as its requirements artifact. Live legs also need the read-only services the
-topology names; without them a leg stops and says why.
+A `git-live/` or `live/` variant also needs the read-only device service its topology names; without it a leg stops and says why.
