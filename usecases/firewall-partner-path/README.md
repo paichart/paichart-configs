@@ -1,5 +1,9 @@
 # firewall-partner-path: partner HTTPS through two switches, source-NATed at the edge
 
+> **Superseded by [`firewall-partner-path-r2`](../firewall-partner-path-r2/).** Its git-only run (2026-11-11) was refused at
+> the integration review on two plan defects: the core rule sat on `Ethernet2`, which traffic from ceos1 never crosses, and no
+> route took the app's replies back to the NAT pool. Kept unchanged as that run's input.
+
 **Domains:** network · **Features:** `derived-value` `cross-leg-value` `held-edit` `program-gate` · `git-only` or `live-read`
 
 An edge leg on `ceos1` permits partner HTTPS from `203.0.113.0/24` to the app `10.20.0.10/32` and translates the partner

@@ -16,7 +16,7 @@ placeholders to fill in, what success looks like):
 
 | Use case | Variants | What it does |
 |---|---|---|
-| [`firewall-partner-path`](firewall-partner-path/) | git-only, git-live | partner HTTPS source-NATed at the edge switch to a pool it selects; the core switch admits that pool |
+| [`firewall-partner-path-r2`](firewall-partner-path-r2/) | git-only, git-live | partner HTTPS source-NATed at the edge switch to a pool it selects and advertises; the core switch admits that pool (revision 2; [`firewall-partner-path`](firewall-partner-path/) is superseded) |
 | [`ssh-access-triangle`](ssh-access-triangle/) | git-only | an SSH allowlist for the management network on three switches |
 | [`igp-migration-2node`](igp-migration-2node/) | live | OSPF to IS-IS in four gated phases; you apply each phase before the next |
 

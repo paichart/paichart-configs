@@ -1,0 +1,58 @@
+{
+  "name": "firewall-partner-path-r2-git-live",
+  "description": "A two-leg network program: an edge leg on ceos1 permits partner HTTPS, source-NATs it to a pool it selects and advertises that pool; a core leg on ceos2 admits that pool to the app.",
+  "path": "partner -> ceos1 Ethernet3 (edge) -> ceos1 Ethernet1 -> ceos2 Ethernet1 (core) -> internal app",
+  "fabric": {
+    "devices": [
+      "ceos1",
+      "ceos2"
+    ],
+    "natPoolRange": "10.99.0.0/24",
+    "link": {
+      "subnet": "10.0.12.0/30",
+      "ceos1": {
+        "interface": "Ethernet1",
+        "address": "10.0.12.1"
+      },
+      "ceos2": {
+        "interface": "Ethernet1",
+        "address": "10.0.12.2"
+      }
+    },
+    "bgp": {
+      "ceos1": 65001,
+      "ceos2": 65002
+    }
+  },
+  "policyInterfaces": {
+    "ceos1": {
+      "Ethernet3": "PARTNER-UPLINK",
+      "Ethernet1": "to-ceos2"
+    },
+    "ceos2": {
+      "Ethernet1": "to-ceos1"
+    }
+  },
+  "flow": {
+    "source": "203.0.113.0/24",
+    "destination": "10.20.0.10/32",
+    "protocol": "tcp",
+    "port": 443
+  },
+  "configRepo": {
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "paths": [
+      "network/base/ceos1-startup.cfg",
+      "network/base/ceos2-startup.cfg"
+    ]
+  },
+  "interdependency": {
+    "from": "Pipeline 1",
+    "to": "Pipeline 2",
+    "value": "the NAT pool (a /31 or /30 inside 10.99.0.0/24)"
+  },
+  "readOnlyServices": {
+    "deviceDescriptorUrl": "https://raw.githubusercontent.com/paichart/paichart/main/descriptors/ceos-lab-readonly-descriptor.json"
+  }
+}
