@@ -47,7 +47,6 @@ running switches. The two `requirements.md` files of a pair differ only in their
 | Use case | Variants | What it does |
 |---|---|---|
 | [`igp-migration-2node`](igp-migration-2node/) | `live/` | OSPF to IS-IS in four gated phases; a person applies each phase before the next |
-| [`held-network-window-p1`](held-network-window-p1/) | — | a loopback on each switch on a free address; its runs read an earlier repository and it has not run from this one |
 
 ## Pending — Kubernetes, Terraform, observability
 
