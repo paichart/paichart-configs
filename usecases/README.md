@@ -9,13 +9,13 @@ change are the files of record in this repository.
 | [`telemetry-export-held`](telemetry-export-held/) | network (value), Kubernetes, Terraform, observability | derives the smallest range covering the fabric's telemetry exporters, then authorises exactly that range in a NetworkPolicy, a bucket policy and a collector config | 2026-10-31 (pov-program 2.2.1) |
 | [`held-terraform-window-p1`](held-terraform-window-p1/) | Terraform | adds `prevent_destroy` to the application log bucket, as edits to `terraform/main.tf` | 2026-10-21 |
 | [`held-network-window-p1`](held-network-window-p1/) | network (value + change) | gives each switch a new telemetry-exporter loopback on a free address, derived from the current configuration | 2026-10-27 |
+| [`loopback-ceos2`](loopback-ceos2/) | network (value + change), Git only | a value leg derives one free exporter address from the switches' files in this repository; a change leg adds a loopback on ceos2 with it, as edits to its file | 2026-11-11 (`git-only/`; `git-live/` not yet run) |
 
 **Prepared demos — network only, not yet run from this repository** (each has a README: what you need, the
 placeholders to fill in, what success looks like):
 
 | Use case | Variants | What it does |
 |---|---|---|
-| [`loopback-ceos2`](loopback-ceos2/) | git-only, git-live | a value leg derives one free exporter address; a change leg adds a loopback on ceos2 with it |
 | [`firewall-partner-path`](firewall-partner-path/) | git-only, git-live | partner HTTPS source-NATed at the edge switch to a pool it selects; the core switch admits that pool |
 | [`ssh-access-triangle`](ssh-access-triangle/) | git-only | an SSH allowlist for the management network on three switches |
 | [`igp-migration-2node`](igp-migration-2node/) | live | OSPF to IS-IS in four gated phases; you apply each phase before the next |
