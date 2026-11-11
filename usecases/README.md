@@ -11,13 +11,13 @@ change are the files of record in this repository.
 | [`held-network-window-p1`](held-network-window-p1/) | network (value + change) | gives each switch a new telemetry-exporter loopback on a free address, derived from the current configuration | 2026-10-27 |
 | [`loopback-ceos2`](loopback-ceos2/) | network (value + change), Git only or Git + live | a value leg derives one free exporter address from the switches' files in this repository; a change leg adds a loopback on ceos2 with it, as edits to its file | 2026-11-11 (`git-only/` and `git-live/`) |
 | [`firewall-partner-path-r2`](firewall-partner-path-r2/) | network (two change legs), Git only or Git + live | partner HTTPS admitted at the edge switch and source-NATed to a pool it selects and advertises in BGP; the core switch admits only that pool to the app | 2026-11-11 (`git-only/`), 2026-11-12 (`git-live/`) |
+| [`ssh-access-triangle`](ssh-access-triangle/) | network (one change leg, three switches), Git only | an SSH allowlist admitting only the management network on three OSPF switches | 2026-11-12 (`git-only/`) |
 
 **Prepared demos — network only, not yet run from this repository** (each has a README: what you need, the
 placeholders to fill in, what success looks like):
 
 | Use case | Variants | What it does |
 |---|---|---|
-| [`ssh-access-triangle`](ssh-access-triangle/) | git-only | an SSH allowlist for the management network on three switches |
 | [`igp-migration-2node`](igp-migration-2node/) | live | OSPF to IS-IS in four gated phases; you apply each phase before the next |
 
 `git-only/` reads only the files in this repository; `git-live/` also reads the running switches; `live/` reads only the running switches. The two

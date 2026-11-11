@@ -6,6 +6,9 @@ One change leg adds an SSH allowlist (`MGMT-SSH`: permit tcp/22 from `172.30.31.
 switches of an OSPF triangle, as edits to their configuration files in this repository. Routing, interfaces and the HTTP API
 are untouched.
 
+**Released:** 2026-11-12 — the leg and the integration review approved: `MGMT-SSH` on all three switches, applied to SSH in the
+default VRF, with the admitted network stated as taken from the spec.
+
 **Git only.** The three-switch lab is not running, so there is no `git-live/` variant. The run needs no switches at all.
 
 ## Before you launch
