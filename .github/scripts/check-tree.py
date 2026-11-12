@@ -20,8 +20,9 @@ DOC_NETS = [ipaddress.ip_network(n) for n in ('192.0.2.0/24', '198.51.100.0/24',
 
 
 def tracked():
-    out = subprocess.run(['git', 'ls-files', '-z'], cwd=ROOT, capture_output=True, check=True).stdout.decode()
-    return [p for p in out.split('\0') if p]
+    # tracked AND untracked-not-ignored: run locally before `git add`, a new file is still checked (in CI the two lists are the same)
+    out = subprocess.run(['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], cwd=ROOT, capture_output=True, check=True).stdout.decode()
+    return sorted({p for p in out.split('\0') if p and os.path.exists(os.path.join(ROOT, p))})
 
 
 def allowed_ip(s, allow):
