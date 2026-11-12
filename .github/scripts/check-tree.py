@@ -20,8 +20,10 @@ DOC_NETS = [ipaddress.ip_network(n) for n in ('192.0.2.0/24', '198.51.100.0/24',
 
 
 def tracked():
-    # tracked AND untracked-not-ignored: run locally before `git add`, a new file is still checked (in CI the two lists are the same)
-    out = subprocess.run(['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], cwd=ROOT, capture_output=True, check=True).stdout.decode()
+    # Locally: tracked AND untracked-not-ignored, so a new file is checked before `git add`. In CI (env CI set): tracked only — the
+    # workflow downloads tools (gitleaks) into the workspace, and those are not repository files.
+    cmd = ['git', 'ls-files', '-z'] + ([] if os.environ.get('CI') else ['--cached', '--others', '--exclude-standard'])
+    out = subprocess.run(cmd, cwd=ROOT, capture_output=True, check=True).stdout.decode()
     return sorted({p for p in out.split('\0') if p and os.path.exists(os.path.join(ROOT, p))})
 
 
