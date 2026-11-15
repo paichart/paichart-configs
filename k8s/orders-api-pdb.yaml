@@ -1,0 +1,11 @@
+# Trading namespace: the disruption budget for the orders-api workload.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: orders-api
+  namespace: trading
+  labels: { app: orders-api }
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: { app: orders-api }
