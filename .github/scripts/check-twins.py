@@ -3,19 +3,19 @@
 
 A use case may ship two variants of one program: git-only/ (every device read from its Git file) and git-live/ (the same
 plus reads of the running devices). They must say the same thing except where they read from. This check removes, from
-both requirements.md files, every fenced ``## Device sources`` block and the ``## Connection surfaces`` section, and from
+both requirements.md files, every fenced ``## Device sources`` or ``## Config sources`` block and the ``## Connection surfaces`` section, and from
 both topology.json files the ``name`` and ``readOnlyServices`` keys; what remains must be identical.
 """
 import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BLOCK = re.compile(r'```\n## Device sources\n.*?```\n', re.S)
+BLOCK = re.compile(r'```\n## (Device|Config) sources\n.*?```\n', re.S)
 CONN = re.compile(r'^## Connection surfaces\n.*?(?=^## |\Z)', re.S | re.M)
 
 
 def spec(p):
     with open(p, encoding='utf-8') as f:
-        return CONN.sub('', BLOCK.sub('```\n## Device sources\n```\n', f.read()))
+        return CONN.sub('', BLOCK.sub(lambda m: '```\n## ' + m.group(1) + ' sources\n```\n', f.read()))
 
 
 def topo(p):
@@ -34,7 +34,7 @@ def main():
             continue
         pairs += 1
         if spec(os.path.join(a, 'requirements.md')) != spec(os.path.join(b, 'requirements.md')):
-            errs.append(f'{d}: requirements.md differs outside Device sources / Connection surfaces')
+            errs.append(f'{d}: requirements.md differs outside Device/Config sources / Connection surfaces')
         if topo(os.path.join(a, 'topology.json')) != topo(os.path.join(b, 'topology.json')):
             errs.append(f'{d}: topology.json differs outside name / readOnlyServices')
     for e in errs:
