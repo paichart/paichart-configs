@@ -50,8 +50,8 @@ running switches. The two `requirements.md` files of a pair differ only in their
 
 ## Pending — Kubernetes, Terraform, observability
 
-Not the current focus. [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/)
-are here from earlier work; neither has run from this repository.
+Not the current focus. [`telemetry-export-held-r2`](telemetry-export-held-r2/) (its Kubernetes leg declares its Config sources; from kubernetes-gitops 1.19.0 the earlier revision's Kubernetes leg stops), [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/)
+are here from earlier work; none has run from this repository yet.
 
 ## Running one
 
