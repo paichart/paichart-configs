@@ -1,0 +1,31 @@
+{
+  "name": "telemetry-export-net-k8s-git-live",
+  "description": "A two-leg program: a network value leg works out the smallest aligned range covering the telemetry-exporter addresses on ceos1 and ceos2; a Kubernetes change leg adds a NetworkPolicy in trading admitting only that range to the telemetry receiver on TCP 4317 and 4318.",
+  "fabric": {
+    "devices": ["ceos1", "ceos2"],
+    "exporterDescription": "telemetry-exporter"
+  },
+  "cluster": {
+    "namespace": "trading",
+    "receiverSelector": "app.kubernetes.io/component: telemetry-receiver",
+    "ports": ["TCP 4317", "TCP 4318"]
+  },
+  "configRepo": {
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "paths": [
+      "network/base/ceos1-startup.cfg",
+      "network/base/ceos2-startup.cfg",
+      "k8s/sample-workloads.yaml"
+    ]
+  },
+  "interdependency": {
+    "from": "Pipeline 1",
+    "to": "Pipeline 2",
+    "value": "the exporter range: one aligned IPv4 prefix"
+  },
+  "readOnlyServices": {
+    "deviceDescriptorUrl": "https://raw.githubusercontent.com/paichart/paichart/main/descriptors/ceos-lab-readonly-descriptor.json",
+    "clusterDescriptorUrl": "https://raw.githubusercontent.com/paichart/paichart/main/descriptors/k8s-readonly-descriptor.json"
+  }
+}
