@@ -2,7 +2,8 @@
 """Variant twins in usecases/ (run by .github/workflows/checks.yml; runs locally too).
 
 A use case may ship two variants of one program: git-only/ (every device read from its Git file) and git-live/ (the same
-plus reads of the running devices). They must say the same thing except where they read from. This check removes, from
+plus reads of the running devices) — or, for a use case whose values exist only in the running system, live/ (running systems
+only) and git-live/. They must say the same thing except where they read from. This check removes, from
 both requirements.md files, every fenced ``## Device sources`` or ``## Config sources`` block and the ``## Connection surfaces`` section, and from
 both topology.json files the ``name`` and ``readOnlyServices`` keys; what remains must be identical.
 """
@@ -29,14 +30,20 @@ def main():
     base = os.path.join(ROOT, 'usecases')
     errs, pairs = [], 0
     for d in sorted(os.listdir(base)) if os.path.isdir(base) else []:
-        a, b = os.path.join(base, d, 'git-only'), os.path.join(base, d, 'git-live')
-        if not (os.path.isdir(a) and os.path.isdir(b)):
+        b = os.path.join(base, d, 'git-live')
+        if not os.path.isdir(b):
             continue
-        pairs += 1
-        if spec(os.path.join(a, 'requirements.md')) != spec(os.path.join(b, 'requirements.md')):
-            errs.append(f'{d}: requirements.md differs outside Device/Config sources / Connection surfaces')
-        if topo(os.path.join(a, 'topology.json')) != topo(os.path.join(b, 'topology.json')):
-            errs.append(f'{d}: topology.json differs outside name / readOnlyServices')
+        # git-only/ + git-live/ is the usual pair; live/ + git-live/ is the pair for a use case whose values exist only in the
+        # running system (owner 2026-11-17). Both are compared the same way when present.
+        for other in ('git-only', 'live'):
+            a = os.path.join(base, d, other)
+            if not os.path.isdir(a):
+                continue
+            pairs += 1
+            if spec(os.path.join(a, 'requirements.md')) != spec(os.path.join(b, 'requirements.md')):
+                errs.append(f'{d}/{other} vs git-live: requirements.md differs outside Device/Config sources / Connection surfaces')
+            if topo(os.path.join(a, 'topology.json')) != topo(os.path.join(b, 'topology.json')):
+                errs.append(f'{d}/{other} vs git-live: topology.json differs outside name / readOnlyServices')
     for e in errs:
         print('TWIN', e)
     print(f'{pairs} twin pair(s); ' + ('ok' if not errs else f'{len(errs)} difference(s)'))

@@ -6,7 +6,8 @@ be running, which values are placeholders and what success looks like. **Release
 
 Variants: `git-only/` reads only the files in this repository; `git-live/` also reads the running switches; `live/` reads only the
 running switches. The two `requirements.md` files of a pair differ only in their Device sources blocks and "Connection surfaces"
-(CI checks it).
+(CI checks it). A use case ships `git-only/` + `git-live/`; one whose values exist only in the running system (an address a
+cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/` alone, and its README says why.
 
 ## Released from this repository — network
 
