@@ -1,0 +1,16 @@
+{
+  "name": "terraform-archive-owner-tag",
+  "description": "A single-leg program: an owner tag on the archive bucket, authored as an edit to the configuration-repository file the team keeps in Git.",
+  "workspace": {
+    "name": "prod",
+    "resource": "aws_s3_bucket.archive — the archive bucket acme-archive"
+  },
+  "configRepo": {
+    "_whyThisIsHere": "The file the change is made to. The leg's Config sources block names it; this entry repeats the fact for the planner.",
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "paths": [
+      "terraform/archive.tf"
+    ]
+  }
+}
