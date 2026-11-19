@@ -20,4 +20,4 @@ beside it and does not replace it.
 and `tier` as the file gives them. Its Plan witness names `aws_s3_bucket.archive`, "update in place" and `tags.owner` only. On
 `git-only/` the package says it was designed against the `.tf` file only. The program reports `programReleasable: true`.
 
-**Not yet run.**
+**Released:** `git-only/` on 2026-11-19 (`programReleasable: true`). `git-live/` has not run yet.

@@ -43,6 +43,23 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
 - The stanza was accepted by the switch software in a configuration session (then discarded). Not shown yet: SSH refused on a
   running switch (the three-switch lab is not running).
 
+## Released from this repository — Terraform
+
+| Use case | Shape | Released |
+|---|---|---|
+| [`terraform-archive-owner-tag`](terraform-archive-owner-tag/) | one change leg adds an owner tag to the archive bucket, as an edit to `terraform/archive.tf` | `git-only/` 2026-11-19 |
+
+### What the run proved
+
+**`terraform-archive-owner-tag`**
+- The first run on terraform-iac 1.17.0: the leg read only the file its `## Config sources` block declares, and the package is one
+  edit to that file that adds the `owner` line and leaves `team` and `tier` as the file gives them.
+- The package carries a `Plan witness`: the resource, "update in place" and the one key the change sets, with the sentence that
+  tells the person applying it to stop if the team's CI plan shows anything else. The platform checked the witness against the
+  edit itself (the sentence word for word, nothing missing, no unchanged key given a value) before the review.
+- pAIchart computed no drift and ran no plan; the package says it was designed against the `.tf` file only. Not shown yet: the
+  `git-live/` variant, which also reads the Terraform state as evidence (the lab workspace was not running).
+
 ## Prepared — network, not yet released
 
 | Use case | Variants | What it does |
@@ -54,8 +71,6 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
 [`telemetry-export-net-k8s-r2`](telemetry-export-net-k8s-r2/) — the same program as `git-only/` and `git-live/` twins. Not yet run.
 
 [`telemetry-export-net-k8s`](telemetry-export-net-k8s/) — a network value leg works out the telemetry exporter range; a Kubernetes change leg admits only that range to the receiver. Written by hand with the spec checklist; Kubernetes reads Git and the live cluster. Not yet run.
-
-[`terraform-archive-owner-tag`](terraform-archive-owner-tag/) — one Terraform change leg adds an owner tag to the archive bucket, as an edit to `terraform/archive.tf`; `git-only/` and `git-live/` twins. Needs terraform-iac 1.17.0 or later. Not yet run.
 
 Not the current focus. [`telemetry-export-held-r2`](telemetry-export-held-r2/) (its Kubernetes leg declares its Config sources; from kubernetes-gitops 1.19.0 the earlier revision's Kubernetes leg stops), [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/)
 are here from earlier work; none has run from this repository yet.
