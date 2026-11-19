@@ -92,8 +92,10 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
 
 [`telemetry-export-net-k8s`](telemetry-export-net-k8s/) — a network value leg works out the telemetry exporter range; a Kubernetes change leg admits only that range to the receiver. Written by hand with the spec checklist; Kubernetes reads Git and the live cluster. Not yet run.
 
-Not the current focus. [`telemetry-export-held-r2`](telemetry-export-held-r2/) (its Kubernetes leg declares its Config sources; from kubernetes-gitops 1.19.0 the earlier revision's Kubernetes leg stops), [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/)
-are here from earlier work; none has run from this repository yet.
+Earlier revisions, kept as their runs' inputs: [`telemetry-export-held-r2`](telemetry-export-held-r2/), [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/).
+None has run from this repository, and none runs to completion today: from terraform-iac 1.17.0 a Terraform leg with no
+`## Config sources` block stops before it reads anything (and from kubernetes-gitops 1.19.0 so does a Kubernetes leg). Use
+[`telemetry-export-held-r3`](telemetry-export-held-r3/) and [`terraform-archive-owner-tag`](terraform-archive-owner-tag/) instead.
 
 ## Running one
 
