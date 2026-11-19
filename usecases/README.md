@@ -62,6 +62,24 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
   set up from the declared line. The state was reported beside the file, as evidence, and nobody compared the two: the team's CI
   plan remains the check. The package makes the same one-line change as on `git-only/`.
 
+## Released from this repository — four domains in one program
+
+| Use case | Shape | Released |
+|---|---|---|
+| [`telemetry-export-held-r3`](telemetry-export-held-r3/) | a network value leg works out the telemetry exporter range; a Kubernetes, a Terraform and an observability change leg each admit only that range | `git-live/` 2026-11-19 |
+
+### What the run proved
+
+**`telemetry-export-held-r3`**
+- One value crossed three domain boundaries unchanged: the network leg worked out `10.99.0.0/27` from six exporter addresses on the
+  two switches, and the NetworkPolicy, the bucket policy and the OTLP sender restriction each admit exactly that range.
+- Each change is an edit to the file the team keeps in Git where one is declared; the live cluster, Terraform state and running
+  stack were read as evidence.
+- Each domain's own platform check ran: the Kubernetes file was compared with the live cluster (no differences); the Terraform
+  package's Plan witness was checked against its edit (pAIchart computes no Terraform drift; the team's CI plan is the check); the
+  network derivation was checked against the harvested addresses.
+- Five gates, each released by a person: the plan, the exporter range, and one per change package. Nothing was applied.
+
 ## Prepared — network, not yet released
 
 | Use case | Variants | What it does |
@@ -73,8 +91,6 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
 [`telemetry-export-net-k8s-r2`](telemetry-export-net-k8s-r2/) — the same program as `git-only/` and `git-live/` twins. Not yet run.
 
 [`telemetry-export-net-k8s`](telemetry-export-net-k8s/) — a network value leg works out the telemetry exporter range; a Kubernetes change leg admits only that range to the receiver. Written by hand with the spec checklist; Kubernetes reads Git and the live cluster. Not yet run.
-
-[`telemetry-export-held-r3`](telemetry-export-held-r3/) — one exporter range worked out on the network and used by a Kubernetes, a Terraform and an observability leg; revision 3 declares the Terraform leg's Config sources (needs terraform-iac 1.17.0 or later). `git-live/` only. Not yet run.
 
 Not the current focus. [`telemetry-export-held-r2`](telemetry-export-held-r2/) (its Kubernetes leg declares its Config sources; from kubernetes-gitops 1.19.0 the earlier revision's Kubernetes leg stops), [`telemetry-export-held`](telemetry-export-held/) and [`held-terraform-window-p1`](held-terraform-window-p1/)
 are here from earlier work; none has run from this repository yet.

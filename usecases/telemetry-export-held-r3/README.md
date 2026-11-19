@@ -16,4 +16,4 @@ configuration and the cluster's live state exist only in the running systems.
 observability stack, each behind its read-only service (descriptor URLs in `git-live/topology.json`). Needs kubernetes-gitops
 1.19.0 and terraform-iac 1.17.0 or later.
 
-**Not yet run.**
+**Released:** `git-live/` on 2026-11-19 (`programReleasable: true`): all four legs and the integration review approved.
