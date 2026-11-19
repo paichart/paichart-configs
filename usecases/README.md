@@ -47,7 +47,7 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
 
 | Use case | Shape | Released |
 |---|---|---|
-| [`terraform-archive-owner-tag`](terraform-archive-owner-tag/) | one change leg adds an owner tag to the archive bucket, as an edit to `terraform/archive.tf` | `git-only/` 2026-11-19 |
+| [`terraform-archive-owner-tag`](terraform-archive-owner-tag/) | one change leg adds an owner tag to the archive bucket, as an edit to `terraform/archive.tf` | `git-only/` 2026-11-19, `git-live/` 2026-11-19 |
 
 ### What the run proved
 
@@ -57,8 +57,10 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
 - The package carries a `Plan witness`: the resource, "update in place" and the one key the change sets, with the sentence that
   tells the person applying it to stop if the team's CI plan shows anything else. The platform checked the witness against the
   edit itself (the sentence word for word, nothing missing, no unchanged key given a value) before the review.
-- pAIchart computed no drift and ran no plan; the package says it was designed against the `.tf` file only. Not shown yet: the
-  `git-live/` variant, which also reads the Terraform state as evidence (the lab workspace was not running).
+- pAIchart computed no drift and ran no plan; on `git-only/` the package says it was designed against the `.tf` file only.
+- The `git-live/` run also read the Terraform state of the `prod` workspace, through the read-only Terraform service the platform
+  set up from the declared line. The state was reported beside the file, as evidence, and nobody compared the two: the team's CI
+  plan remains the check. The package makes the same one-line change as on `git-only/`.
 
 ## Prepared — network, not yet released
 
