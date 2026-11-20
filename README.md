@@ -12,6 +12,7 @@ are pending: their folders are present, but none of their use cases has run from
 |---|---|---|
 | `network/` | network-provisioning — one startup configuration per device, per topology (`base`, `igp-2node`, `igp-triangle`) | **in use** |
 | `k8s/`, `terraform/` | Kubernetes, Terraform | pending |
+| `observability/` | observability-config — the collector configuration (`otelcol/config.yaml`) and the OTLP ingress proxy files (`nginx/*.conf`) | pending (from observability-config 1.12.0) |
 | `usecases/` | program inputs (`requirements.md` + `topology.json`) and what each run proved | see [`usecases/README.md`](usecases/README.md) |
 
 ## Self-host quick start
