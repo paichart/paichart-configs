@@ -1,0 +1,53 @@
+{
+  "name": "otlp-ingress-three-leg-git-live",
+  "description": "A network value leg works out the telemetry exporter range from the two lab switches; three observability legs each change one file of the observability stack: the OTLP ingress admits only that range, the collector batch processor gets two declared settings, the operator listener a larger body size.",
+  "fabric": {
+    "devices": [
+      "ceos1",
+      "ceos2"
+    ]
+  },
+  "observability": {
+    "ingress": {
+      "ports": [
+        "TCP 4317",
+        "TCP 4318"
+      ],
+      "file": "observability/nginx/otlp-ingress.conf"
+    },
+    "collector": {
+      "processor": "batch",
+      "file": "observability/otelcol/config.yaml"
+    },
+    "operatorListener": {
+      "port": "TCP 14318",
+      "file": "observability/nginx/operator-access.conf"
+    }
+  },
+  "configRepo": {
+    "owner": "paichart",
+    "repo": "paichart-configs",
+    "ref": "main",
+    "paths": [
+      "network/base/ceos1-startup.cfg",
+      "network/base/ceos2-startup.cfg",
+      "observability/otelcol/config.yaml",
+      "observability/nginx/otlp-ingress.conf",
+      "observability/nginx/operator-access.conf"
+    ]
+  },
+  "interdependency": {
+    "from": "Pipeline 1",
+    "to": "Pipeline 2",
+    "value": "the exporter range: the smallest aligned CIDR covering every exporter-marked interface address on ceos1 and ceos2",
+    "independent": [
+      "Pipeline 3",
+      "Pipeline 4"
+    ]
+  },
+  "readOnlyServices": {
+    "fabricDescriptorUrl": "https://raw.githubusercontent.com/paichart/paichart/main/descriptors/ceos-lab-readonly-descriptor.json",
+    "observabilityServiceName": "observability-readonly",
+    "observabilityDescriptorUrl": "https://raw.githubusercontent.com/paichart/paichart/main/descriptors/observability-readonly-descriptor.json"
+  }
+}
