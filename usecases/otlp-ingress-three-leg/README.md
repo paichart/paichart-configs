@@ -19,8 +19,8 @@ Built from [`telemetry-export-held-r3`](../telemetry-export-held-r3/) `git-live/
 design decisions), with the Kubernetes and Terraform legs removed and the observability leg split in three. Details: each variant's
 `PROVENANCE.md`.
 
-**Needs observability-config 1.12.0** (not yet deployed when this was written). Under an earlier version an observability leg
-does not read a `## Config sources` block. This use case is the input for the 1.12.0 canary.
+**Needs observability-config 1.12.0** (live since 2026-11-24). Under an earlier version an observability leg does not read a
+`## Config sources` block.
 
 **Variants:** `git-live/` only. There is no `git-only/` variant: every observability leg reads the running stack's state
 (targets and rules) through the read-only observability service, whatever its Config sources block declares. With three
@@ -63,4 +63,11 @@ pinned to this repository.
   operator package changes one line of `operator-access.conf`. Each is an edit to the held Git file, with a rollback.
 - The integration review approves checks 1–8, and the program completes releasable. Nothing is applied.
 
-**Not yet run.**
+**Released:** `git-live/` on 2026-11-25 (`programReleasable: true`): the value leg, all three observability legs and the
+integration review approved. Every leg's Harvester read all six declared lines and kept the three Git files; each package is one
+edit to its own file.
+
+**Its first run (2026-11-24) was refused, correctly:** the ingress leg's brief, written by the pipeline for that leg, told its
+Harvester to read only the ingress file, so the leg kept one of the three declared files and the platform stopped it before
+release. Since 2026-11-25 the platform places a read rule directly after the block in each observability Harvester's brief: a brief
+may limit what a leg changes, never which declared lines it reads.

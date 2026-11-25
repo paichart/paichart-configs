@@ -62,6 +62,24 @@ cluster assigns, a node's range) ships `live/` + `git-live/` instead, or `live/`
   set up from the declared line. The state was reported beside the file, as evidence, and nobody compared the two: the team's CI
   plan remains the check. The package makes the same one-line change as on `git-only/`.
 
+## Released from this repository — observability
+
+| Use case | Shape | Released |
+|---|---|---|
+| [`otlp-ingress-three-leg`](otlp-ingress-three-leg/) | a network value leg works out the exporter range; three observability legs each change one file from one shared `## Config sources` block: the OTLP ingress admits only that range, the collector's batch processor gets two settings, the operator listener a larger body size | `git-live/` 2026-11-25 |
+
+### What the run proved
+
+**`otlp-ingress-three-leg`**
+- Three legs of one protocol shared one declared block: each leg read and kept every declared file, and each changed only its own.
+  Only the operator leg touched the body-size setting both nginx files carry.
+- The platform compared each Git file with its served copy (identical, all three) and showed the result to the designer and the
+  reviewer; nobody had to compare by hand.
+- With two observability legs or more the spec names a read-only service registered once before launch, so no leg removes it
+  under another (see the use case's README).
+- Its first run was refused because one leg's brief narrowed what its Harvester read; the platform's read rule, placed beside the
+  block, fixed it, and the re-run released. Nothing was applied.
+
 ## Released from this repository — four domains in one program
 
 | Use case | Shape | Released |
