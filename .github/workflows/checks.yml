@@ -1,5 +1,5 @@
 # Checks on every pull request and every push to main. Fork-safe: `pull_request` (never pull_request_target), read-only token,
-# no secrets used, no third-party actions beyond GitHub's own checkout.
+# no secrets used, no third-party actions (GitHub's own checkout and setup-node only).
 name: checks
 
 on:
@@ -34,3 +34,36 @@ jobs:
 
       - name: Variant twins (git-only vs git-live)
         run: python3 .github/scripts/check-twins.py
+
+  # The spec checks a user runs before a program (docs/WRITING-A-SPEC.md), over every released use case — what users copy must
+  # pass them. The checks live in the public pAIchart repo (paichart/paichart, main): check-spec-topology.py and
+  # check-requirements-sources.ts, which parses a block with the platform's own grammar, so its dependencies are installed.
+  spec-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: configs
+      - uses: actions/checkout@v5
+        with:
+          repository: paichart/paichart
+          ref: main
+          path: paichart
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install the public repo's dependencies (no install scripts) and generate the Prisma client
+        working-directory: paichart
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npx prisma generate
+      - name: Both spec checks on every use case
+        working-directory: paichart
+        run: |
+          fail=0
+          for r in ../configs/usecases/*/*/requirements.md; do
+            d=$(dirname "$r"); name=${d#../configs/usecases/}
+            if ! python3 scripts/check-spec-topology.py --spec "$r" --topology "$d/topology.json"; then echo "::error::$name: check-spec-topology failed"; fail=1; fi
+            if ! npx ts-node -r tsconfig-paths/register scripts/check-requirements-sources.ts --draft "$r"; then echo "::error::$name: check-requirements-sources failed"; fail=1; fi
+          done
+          exit $fail
